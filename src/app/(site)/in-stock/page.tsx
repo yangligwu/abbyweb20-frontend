@@ -6,6 +6,7 @@ import { Range, getTrackBackground } from "react-range";
 import type { ReactNode } from "react";
 import Image from "next/image";
 import { DoorProductGrid } from "@/components/doors/grid/DoorProductGrid";
+import { RangeSliderPro } from "@/components/doors/filters/ui/RangeSliderPro";
 
 /* =========================================================
  * 类型定义
@@ -317,110 +318,7 @@ const AccordionSection = ({
   </div>
 );
 
-/* =========================================================
- * RangeSliderPro（React 18 安全版本）
- * ========================================================= */
-type RangeSliderProProps = {
-  min: number;
-  max: number;
-  step?: number;
-  value: [number, number];
-  onChange: (value: [number, number]) => void;
-};
 
-export const RangeSliderPro = ({
-  min,
-  max,
-  step = 1,
-  value,
-  onChange,
-}: RangeSliderProProps) => {
-  const [minVal, maxVal] = value;
-
-  const percent = (v: number) => ((v - min) / (max - min)) * 100;
-  const clampPercent = (p: number) => Math.min(Math.max(p, 8), 92);
-
-  return (
-    <div className="relative py-6">
-      {/* 左标签 */}
-      <div
-        className="absolute -top-1 text-xs font-medium text-gray-700 whitespace-nowrap"
-        style={{
-          left: `${clampPercent(percent(minVal))}%`,
-          transform: "translateX(-20%)",
-        }}
-      >
-        {minVal}″
-      </div>
-
-      {/* 右标签 */}
-      <div
-        className="absolute -top-1 text-xs font-medium text-gray-700 whitespace-nowrap"
-        style={{
-          left: `${clampPercent(percent(maxVal))}%`,
-          transform: "translateX(-80%)",
-        }}
-      >
-        {maxVal}″
-      </div>
-
-      <div className="px-3">
-        <Range
-          values={value}
-          min={min}
-          max={max}
-          step={step}
-          onChange={(vals) => onChange([vals[0], vals[1]])}
-          renderTrack={({ props, children }) => {
-            const { key: reactKey, ...rest } = props as {
-              key?: React.Key;
-            } & typeof props;
-
-            return (
-              <div
-                key={reactKey}
-                {...rest}
-                className="w-full h-1 rounded-full"
-                style={{
-                  ...rest.style,
-                  background: getTrackBackground({
-                    values: value,
-                    colors: ["#ccc", "#f6a800", "#ccc"],
-                    min,
-                    max,
-                  }),
-                }}
-              >
-                {children}
-              </div>
-            );
-          }}
-          renderThumb={({ props }) => {
-            const { key: reactKey, ...rest } = props as {
-              key?: React.Key;
-            } & typeof props;
-
-            return (
-              <div
-                key={reactKey}
-                {...rest}
-                style={{
-                  ...rest.style,
-                  height: "14px",
-                  width: "14px",
-                  backgroundColor: "#f6a800",
-                  borderRadius: "50%",
-                  border: "2px solid white",
-                  boxShadow: "0 0 3px rgba(0,0,0,0.4)",
-                }}
-              />
-            );
-          }}
-        />
-      </div>
-    </div>
-  );
-};
 
 /* =========================================================
  * 主页面
