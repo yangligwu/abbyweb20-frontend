@@ -8,8 +8,13 @@ import type { DoorProductCardData } from "@/components/doors/grid/DoorProductCar
 /* =========================================================
  * Types
  * ========================================================= */
+type RouteParams = {
+  category?: string;
+};
+
 type PageProps = {
-  params: { category: string };
+  // Next.js 15/16: params is a Promise in Server Components
+  params: Promise<RouteParams>;
 };
 
 type CategoryConfig = {
@@ -74,6 +79,16 @@ const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
   },
 };
 
+/* =========================================================
+ * Helpers
+ * ========================================================= */
+function resolveCategoryKey(input: unknown, fallback = "french-doors"): string {
+  if (typeof input === "string" && input.trim()) {
+    return input.toLowerCase();
+  }
+  return fallback;
+}
+
 function toTitleCaseSlug(slug: string) {
   return slug
     .split("-")
@@ -115,9 +130,10 @@ const DEMO_PRODUCTS: DoorProductCardData[] = [
  * SEO Metadata
  * ========================================================= */
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const key = params.category.toLowerCase();
-  const cfg = CATEGORY_CONFIG[key];
+  const { category } = await params; // ✅ await params
+  const key = resolveCategoryKey(category);
 
+  const cfg = CATEGORY_CONFIG[key];
   const title = cfg?.title ?? `${toTitleCaseSlug(key)} Doors`;
   const description =
     cfg?.intro ??
@@ -134,8 +150,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 /* =========================================================
  * Page
  * ========================================================= */
-export default function Page({ params }: PageProps) {
-  const key = params.category.toLowerCase();
+export default async function Page({ params }: PageProps) {
+  const { category } = await params; // ✅ await params
+  const key = resolveCategoryKey(category);
   const cfg = CATEGORY_CONFIG[key];
 
   const title = cfg?.title ?? `${toTitleCaseSlug(key)} Doors`;
@@ -147,7 +164,6 @@ export default function Page({ params }: PageProps) {
     cfg?.whatBody ??
     "Learn about this door category’s design characteristics and applications.";
 
-  /* ---------------- Slots ---------------- */
   const FiltersSlot = <DoorInStockFilters products={[]} />;
 
   const ResultsSlot = (
