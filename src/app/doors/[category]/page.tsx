@@ -9,7 +9,7 @@ import type { DoorProductCardData } from "@/components/doors/grid/DoorProductCar
  * Types
  * ========================================================= */
 type PageProps = {
-  params?: { category?: string };
+  params: { category: string };
 };
 
 type CategoryConfig = {
@@ -47,8 +47,7 @@ const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
   },
   "folding-doors": {
     title: "Folding Doors",
-    intro:
-      "Discover folding (bi-fold) doors designed to fully open spaces.",
+    intro: "Discover folding (bi-fold) doors designed to fully open spaces.",
     whatTitle: "What are folding doors?",
     whatBody:
       "Folding doors consist of multiple panels that stack neatly to one or both sides.",
@@ -57,8 +56,7 @@ const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
   },
   "pivot-doors": {
     title: "Pivot Doors",
-    intro:
-      "Explore pivot door designs that make a bold architectural statement.",
+    intro: "Explore pivot door designs that make a bold architectural statement.",
     whatTitle: "What are pivot doors?",
     whatBody:
       "Pivot doors rotate on a pivot hinge rather than traditional side hinges.",
@@ -67,8 +65,7 @@ const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
   },
   "wine-cellar-doors": {
     title: "Wine Cellar Doors",
-    intro:
-      "Browse wine cellar doors designed to protect and showcase collections.",
+    intro: "Browse wine cellar doors designed to protect and showcase collections.",
     whatTitle: "What are wine cellar doors?",
     whatBody:
       "Wine cellar doors often combine glass and metal to balance visibility and insulation.",
@@ -117,10 +114,8 @@ const DEMO_PRODUCTS: DoorProductCardData[] = [
 /* =========================================================
  * SEO Metadata
  * ========================================================= */
-export async function generateMetadata(
-  { params }: PageProps
-): Promise<Metadata> {
-  const key = params?.category?.toLowerCase() ?? "";
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const key = params.category.toLowerCase();
   const cfg = CATEGORY_CONFIG[key];
 
   const title = cfg?.title ?? `${toTitleCaseSlug(key)} Doors`;
@@ -140,15 +135,14 @@ export async function generateMetadata(
  * Page
  * ========================================================= */
 export default function Page({ params }: PageProps) {
-  const key = params?.category?.toLowerCase() ?? "";
+  const key = params.category.toLowerCase();
   const cfg = CATEGORY_CONFIG[key];
 
   const title = cfg?.title ?? `${toTitleCaseSlug(key)} Doors`;
   const intro =
     cfg?.intro ??
     "Browse doors by category. Compare styles, glass options, and configurations.";
-  const whatTitle =
-    cfg?.whatTitle ?? `What are ${toTitleCaseSlug(key)} doors?`;
+  const whatTitle = cfg?.whatTitle ?? `What are ${toTitleCaseSlug(key)} doors?`;
   const whatBody =
     cfg?.whatBody ??
     "Learn about this door category’s design characteristics and applications.";
