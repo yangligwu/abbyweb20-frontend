@@ -14,13 +14,13 @@ export type DoorLandingTemplateProps = {
 
   // what 区块
   whatTitle: string;             // H2 "What are ...?"
-  whatBody: string;              // 解释段落
+  whatBody: string;              // 解释段落（支持多段，空行分段）
   whatImage?: string;            // what 区块右侧大图（public 路径）
 
   // 左侧 Filters
   FiltersSlot?: React.ReactNode;
 
-  // ⭐ 新增：右侧 Results Slot（核心）
+  // 右侧 Results Slot
   ResultsSlot?: React.ReactNode;
 
   // 兼容旧页面
@@ -213,13 +213,25 @@ export default function DoorLandingTemplate(props: DoorLandingTemplateProps) {
         </div>
       </section>
 
-      {/* 6) What */}
+      {/* 6) What（✅ 方案 A：按空行拆分成多段 <p>） */}
       <section className="mx-auto max-w-6xl px-6 pb-14">
         <div className="grid grid-cols-12 gap-10 items-center">
           <div className="col-span-12 md:col-span-6">
             <h2 className="text-3xl font-semibold">{whatTitle}</h2>
-            <p className="mt-3 text-neutral-600">{whatBody}</p>
+
+            {whatBody
+              .split(/\n\s*\n/)
+              .filter(Boolean)
+              .map((para, idx) => (
+                <p
+                  key={idx}
+                  className="mt-3 text-neutral-600 leading-relaxed"
+                >
+                  {para.trim()}
+                </p>
+              ))}
           </div>
+
           <div className="col-span-12 md:col-span-6">
             <div className="relative h-64 md:h-[360px] rounded-2xl overflow-hidden bg-neutral-100">
               {whatImage && (

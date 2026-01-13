@@ -45,9 +45,9 @@ const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
     intro:
       "Browse sliding door designs that save space while delivering wide openings and smooth operation.",
     whatTitle: "What are sliding doors?",
-    whatBody:
-      "Sliding doors operate on horizontal tracks and are ideal for patios and large openings.",
-    bannerImage: "/images/placeholder/banner-sliding.jpg",
+    whatBody: `A sliding door is a door system that opens horizontally by gliding along a track, rather than swinging on hinges. Sliding doors are designed to maximize natural light, outdoor views, and usable interior space, making them ideal for patios, terraces, balconies, and modern indoor-outdoor living areas.
+
+At Abby Iron Doors, we design and manufacture custom steel and aluminum sliding doors that combine refined aesthetics with smooth performance and structural integrity.`,
     whatImage: "/images/placeholder/what-sliding.jpg",
   },
   "folding-doors": {
