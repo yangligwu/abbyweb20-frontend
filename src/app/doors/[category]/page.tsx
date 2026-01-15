@@ -54,8 +54,10 @@ At Abby Iron Doors, we design and manufacture custom steel and aluminum sliding 
     title: "Folding Doors",
     intro: "Discover folding (bi-fold) doors designed to fully open spaces.",
     whatTitle: "What are folding doors?",
-    whatBody:
-      "Folding doors consist of multiple panels that stack neatly to one or both sides.",
+    whatBody: `A folding door—also known as a bi-fold door—is a multi-panel door system that opens by folding panels together and stacking them to one side or both sides of an opening. Folding doors are designed to create wide, unobstructed openings, seamlessly connecting indoor and outdoor spaces.
+
+    At Abby Iron Doors, we design and manufacture custom steel and aluminum folding doors engineered for smooth operation, structural integrity, and architectural impact.`,
+
     bannerImage: "/images/placeholder/banner-folding.jpg",
     whatImage: "/images/placeholder/what-folding.jpg",
   },
