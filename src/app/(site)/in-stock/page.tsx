@@ -1,7 +1,7 @@
 // src/app/(site)/in-stock/page.tsx
 "use client";
 
-import { useEffect,useMemo, useState } from "react";
+import { useEffect,useMemo, useState, useRef  } from "react";
 import { Range, getTrackBackground } from "react-range";
 import type { ReactNode } from "react";
 import Image from "next/image";
@@ -412,16 +412,79 @@ export default function InStockPage() {
 
   const [openSection, setOpenSection] = useState({
     availability: true,
-    style: true,
-    doorType: true,
-    width: true,
-    height: true,
-    glass: true,
-    shape: true,
-    thermal: true,
-    sale: true,
+    style: false,
+    doorType: false,
+    width: false,
+    height: false,
+    glass: false,
+    shape: false,
+    thermal: false,
+    sale: false,
   });
 
+  /* =========================================================
+   * ⭐ Step 1：filter → section 映射表
+   * ========================================================= */
+  const FILTER_SECTION_MAP: Record<
+    keyof Filters,
+    keyof typeof openSection | null
+  > = {
+    availability: "availability",
+    styles: "style",
+    doorTypes: "doorType",
+    glass: "glass",
+    shapes: "shape",
+    thermal: "thermal",
+    onSale: "sale",
+    widthRange: "width",
+    heightRange: "height",
+  };
+
+  /* =========================================================
+   * ⭐ Step 2：每个 section 独立的 timer 容器
+   * ========================================================= */
+  const autoCloseTimerRef = useRef<
+    Partial<Record<keyof typeof openSection, number>>
+  >({});
+
+  /* =========================================================
+   * ⭐ Step 3：2 秒后自动收敛（核心逻辑）
+   * ========================================================= */
+  useEffect(() => {
+    (Object.keys(filters) as (keyof Filters)[]).forEach((filterKey) => {
+      const sectionKey = FILTER_SECTION_MAP[filterKey];
+      if (!sectionKey) return;
+
+      // 只对当前「展开中」的 section 生效
+      if (!openSection[sectionKey]) return;
+
+      const value = filters[filterKey];
+
+      // 判断是否“真的有选中值”
+      const hasSelection = Array.isArray(value)
+        ? value.length > 0
+        : filterKey === "widthRange" || filterKey === "heightRange"
+        ? value[0] !== DEFAULT_FILTERS[filterKey][0] ||
+          value[1] !== DEFAULT_FILTERS[filterKey][1]
+        : false;
+
+      if (!hasSelection) return;
+
+      // 清除旧 timer（防止连点 / 连拖）
+      if (autoCloseTimerRef.current[sectionKey]) {
+        clearTimeout(autoCloseTimerRef.current[sectionKey]);
+      }
+
+      // 设置新的 2 秒自动收起
+      autoCloseTimerRef.current[sectionKey] = window.setTimeout(() => {
+        setOpenSection((prev) => ({
+          ...prev,
+          [sectionKey]: false,
+        }));
+      }, 2000);
+    });
+  }, [filters, openSection]); // 监听 filters & openSection 变化
+  
   const resetFilters = () => {
     setFilters(DEFAULT_FILTERS);
   };
@@ -866,52 +929,47 @@ export default function InStockPage() {
 
           {/* ---------------- 右侧产品展示区域 ---------------- */}
           <section className="flex-1">
-            {/* 顶部计数 */}
-            <div className="flex items-center justify-between mb-4 text-xs text-gray-500">
-              <span>
-                Showing <strong>{filteredProducts.length}</strong> of{" "}
-                {PRODUCTS.length} in-stock items
-                {activeChips.length > 0 && (
-                  <div className="mb-4 flex flex-wrap gap-2">
-                    {activeChips.map((chip, idx) => (
-                      <span
-                        key={idx}
-                        className="
-                          inline-flex items-center gap-1
-                          rounded-full
-                          border border-[#f6a800]
-                          bg-[#fff4d6]
-                          px-3 py-1
-                          text-xs text-gray-800
-                        "
-                      >
-                        <span className="font-medium">{chip.label}:</span>
-                        <span>{chip.value}</span>
-
-                        <button
-                          onClick={() => removeChip(chip)}
-                          className="
-                            ml-1
-                            text-gray-500
-                            hover:text-black
-                            transition-colors
-                          "
-                        >
-                          ×
-                        </button>
-                      </span>
-                    ))}
+            {/* 顶部：只显示 Chips（不要再显示 Showing...，避免重复） */}
+            {activeChips.length > 0 && (
+              <div className="mb-4 flex flex-wrap items-center gap-2">
+                {activeChips.map((chip, idx) => (
+                  <span
+                    key={idx}
+                    className="
+                      inline-flex items-center gap-1
+                      rounded-full
+                      border border-[#f6a800]
+                      bg-[#fff4d6]
+                      px-3 py-1
+                      text-xs text-gray-800
+                    "
+                  >
+                    <span className="font-medium">{chip.label}:</span>
+                    <span>{chip.value}</span>
 
                     <button
-                      onClick={resetFilters}
-                      className="ml-2 text-xs text-gray-500 underline"
+                      onClick={() => removeChip(chip)}
+                      className="
+                        ml-1
+                        text-gray-500
+                        hover:text-black
+                        transition-colors
+                      "
+                      aria-label={`Remove ${chip.label} ${chip.value}`}
                     >
-                      Clear all
+                      ×
                     </button>
-                  </div>
-                )}
-              </span>
-            </div>
+                  </span>
+                ))}
+
+                <button
+                  onClick={resetFilters}
+                  className="ml-2 text-xs text-gray-500 underline"
+                >
+                  Clear all
+                </button>
+              </div>
+            )}
 
             {/* ---------------- 分页逻辑 ---------------- */}
             <Pagination
