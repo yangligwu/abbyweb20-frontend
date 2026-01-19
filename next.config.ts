@@ -8,8 +8,8 @@ const nextConfig: NextConfig = {
       // ✅ Doors: old by-type URLs -> new canonical category URLs
       // ---------------------------
       {
-        source: "/doors/by-type/french",
-        destination: "/doors/french-doors",
+        source: "/doors/by-type/swinging",
+        destination: "/doors/swinging-doors",
         permanent: true,
       },
       {

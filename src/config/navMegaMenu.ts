@@ -8,14 +8,11 @@ export type MegaItem = {
 
 export const DOORS_MEGA = {
   sections: [
-    // ---------------------------
-    // 1️⃣ By Product Type（主入口，SEO & 用户心智第一层）
-    // ---------------------------
     {
       key: "by-type",
       title: "By Product Type",
       items: [
-        { label: "French Doors", href: "/doors/french-doors" },
+        { label: "Swinging Doors", href: "/doors/swinging-doors" },
         { label: "Sliding Doors", href: "/doors/sliding-doors" },
         { label: "Folding Doors", href: "/doors/folding-doors" },
         { label: "Pivot Doors", href: "/doors/pivot-doors" },
@@ -23,9 +20,6 @@ export const DOORS_MEGA = {
       ],
     },
 
-    // ---------------------------
-    // 2️⃣ By Material（二级入口 / 将来可升级为 filters）
-    // ---------------------------
     {
       key: "by-material",
       title: "By Material",
@@ -37,9 +31,16 @@ export const DOORS_MEGA = {
       ],
     },
 
-    // ---------------------------
-    // 3️⃣ All Doors（兜底入口）
-    // ---------------------------
+    // ✅ 新增：By Application（放到第 3 个）
+    {
+      key: "by-application",
+      title: "By Application",
+      items: [
+        { label: "Residential", href: "/doors/application/residential" },
+        { label: "Commercial", href: "/doors/application/commercial" },
+      ],
+    },
+
     {
       key: "all-doors",
       title: "All Doors",
@@ -57,3 +58,8 @@ export const DOORS_MEGA = {
     imageSrc: "/menu/feature-bayview.jpg",
   },
 };
+
+console.log(
+  "[navMegaMenu.ts LOADED]",
+  DOORS_MEGA.sections.map(s => s.key)
+);

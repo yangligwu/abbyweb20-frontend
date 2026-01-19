@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { DESIGN_STUDIOS, SERVICE_AREAS } from "@/config/locations";
 import MegaMenu from "@/components/layout/MegaMenu";
-import { DOORS_MEGA } from "@/config/navMegaMenu";
+import { DOORS_MEGA } from "../../config/navMegaMenu";
 
 /* ===================== Marvin-style Chevron ===================== */
 function ChevronDown({
@@ -38,6 +38,11 @@ function ChevronDown({
 
 export default function Navbar() {
   const pathname = usePathname() || "/";
+
+  console.log(
+    "[Navbar DOORS_MEGA]",
+    DOORS_MEGA.sections.map((s) => s.key)
+  );
 
   /* ===================== Mega Menu State ===================== */
   const [openMenu, setOpenMenu] = useState<string | null>(null);
@@ -310,6 +315,7 @@ export default function Navbar() {
 
       {/* ===================== Doors Mega Menu ===================== */}
       <MegaMenu
+        key={`doors-${DOORS_MEGA.sections.map((s) => s.key).join("|")}`}
         open={openMenu === "doors"}
         onClose={closeNow}
         onMouseEnter={() => {}}

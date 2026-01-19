@@ -32,7 +32,7 @@ function Breadcrumbs({ items }: { items: Crumb[] }) {
     <nav className="text-sm text-neutral-500" aria-label="Breadcrumb">
       <ol className="flex flex-wrap gap-2">
         {items.map((c, idx) => (
-          <li key={c.href} className="flex items-center gap-2">
+          <li key={`${c.href}-${idx}`} className="flex items-center gap-2">
             <Link href={c.href} className="hover:text-neutral-800">
               {c.label}
             </Link>
@@ -141,9 +141,19 @@ export default function DoorLandingTemplate(props: DoorLandingTemplateProps) {
         <h1 className="mt-4 text-4xl font-semibold tracking-tight">
           {title}
         </h1>
-        <p className="mt-3 max-w-3xl text-neutral-600 leading-relaxed">
-          {intro}
-        </p>
+        {intro
+          .split(/\n\s*\n/)
+          .filter(Boolean)
+          .map((para, idx) => (
+            <p
+              key={idx}
+              className={idx === 0
+                ? "mt-3 max-w-6xl text-neutral-600 leading-relaxed"
+                : "mt-2 max-w-6xl text-neutral-600 leading-relaxed"}
+            >
+              {para.trim()}
+            </p>
+          ))}
       </section>
 
       {/* 4–5) Filters + Results */}

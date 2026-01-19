@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { MegaItem } from "@/config/navMegaMenu";
 
 type Section = { key: string; title: string; items: MegaItem[] };
@@ -14,7 +14,7 @@ export default function MegaMenu(props: {
   onMouseLeave: () => void;
   sections: Section[];
   feature?: { eyebrow: string; title: string; href: string; imageSrc: string };
-  topOffsetPx?: number; // 顶部偏移（固定 header 高度）
+  topOffsetPx?: number;
 }) {
   const {
     open,
@@ -23,40 +23,42 @@ export default function MegaMenu(props: {
     onMouseLeave,
     sections,
     feature,
-    topOffsetPx = 96, // Utility(32) + Main(64)
+    topOffsetPx = 96,
   } = props;
 
-  // ✅ 只在初始 render 时给默认值
+  console.log(
+    "[MegaMenu sections]",
+    sections.map((s) => s.key)
+  );
+
+  // ✅ 初始值来自 sections（只有在组件 mount 时计算一次）
   const [activeKey, setActiveKey] = useState<string>(() => {
-    return sections.length > 0 ? sections[0].key : "";
+    return sections?.length ? sections[0].key : "";
   });
 
   if (!open) return null;
+  if (!sections || sections.length === 0) return null;
 
   const active = sections.find((s) => s.key === activeKey) ?? sections[0];
 
   return (
     <>
-      {/* ===================== Backdrop（幕布） ===================== */}
-      {/* 只负责 dim 背景，不制造任何边界线 */}
       <div
         className="fixed inset-0 z-[9990] bg-black/35"
         style={{ top: topOffsetPx }}
         onClick={onClose}
       />
 
-      {/* ===================== Panel 容器（无边界、无 shadow） ===================== */}
       <div
         className="fixed left-0 right-0 z-[9991] bg-transparent"
         style={{ top: topOffsetPx }}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
-        {/* ===================== 内容区（shadow 下沉在这里） ===================== */}
         <div className="mx-auto max-w-7xl px-6">
           <div className="rounded-b-2xl bg-white py-10 shadow-2xl">
             <div className="grid grid-cols-12 gap-10">
-              {/* ===================== Left main list ===================== */}
+              {/* Left */}
               <div className="col-span-3">
                 <div className="space-y-2">
                   {sections.map((s) => {
@@ -80,7 +82,6 @@ export default function MegaMenu(props: {
                   })}
                 </div>
 
-                {/* All Doors 快捷入口 */}
                 <div className="mt-6 text-sm">
                   <Link
                     href="/doors"
@@ -92,9 +93,8 @@ export default function MegaMenu(props: {
                 </div>
               </div>
 
-              {/* ===================== Middle items ===================== */}
+              {/* Middle */}
               <div className="col-span-6">
-
                 <div className="grid grid-cols-2 gap-6">
                   {active.items.map((it) => (
                     <Link
@@ -112,7 +112,7 @@ export default function MegaMenu(props: {
                 </div>
               </div>
 
-              {/* ===================== Right feature card ===================== */}
+              {/* Right */}
               <div className="col-span-3">
                 {feature && (
                   <Link

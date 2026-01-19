@@ -1,4 +1,6 @@
 // src/app/page.tsx
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div className="w-full">
@@ -10,6 +12,7 @@ export default function Home() {
           alt="Abby iron doors with mountain view"
           className="absolute inset-0 h-full w-full object-cover"
         />
+
         {/* 半透明遮罩 */}
         <div className="absolute inset-0 bg-black/35" />
 
@@ -19,29 +22,32 @@ export default function Home() {
             <p className="text-xs font-semibold tracking-[0.2em] uppercase">
               Abby Iron Doors 2.0
             </p>
+
             <h1 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
               Modern iron doors for
               <br />
               light-filled living spaces.
             </h1>
-            <p className="mt-4 text-sm md:text-base text-gray-100/90">
+
+            <p className="mt-4 text-sm text-gray-100/90 md:text-base">
               Custom-designed iron and glass doors that frame the perfect view —
               engineered for security, performance, and timeless aesthetics.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3 text-sm">
-              <a
+              <Link
                 href="/doors/by-type/bi-fold"
                 className="rounded-full bg-white px-6 py-2 font-medium text-black hover:bg-gray-100"
               >
                 Explore Bi-Fold Doors
-              </a>
-              <a
-                href="/doors/all"
+              </Link>
+
+              <Link
+                href="/doors"
                 className="rounded-full border border-white/80 px-6 py-2 font-medium text-white hover:bg-white/10"
               >
                 View all collections
-              </a>
+              </Link>
             </div>
           </div>
         </div>
