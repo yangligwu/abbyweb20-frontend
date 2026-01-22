@@ -411,11 +411,11 @@ export default function InStockPage() {
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
 
   const [openSection, setOpenSection] = useState({
-    availability: true,
+    availability: true,  // ✅ 默认展开
     style: false,
     doorType: false,
-    width: false,
-    height: false,
+    width: true,   // ✅ 默认展开
+    height: true,   // ✅ 默认展开
     glass: false,
     shape: false,
     thermal: false,
@@ -450,6 +450,7 @@ export default function InStockPage() {
   /* =========================================================
    * ⭐ Step 3：2 秒后自动收敛（核心逻辑）
    * ========================================================= */
+  /*
   useEffect(() => {
     (Object.keys(filters) as (keyof Filters)[]).forEach((filterKey) => {
       const sectionKey = FILTER_SECTION_MAP[filterKey];
@@ -484,7 +485,8 @@ export default function InStockPage() {
       }, 2000);
     });
   }, [filters, openSection]); // 监听 filters & openSection 变化
-  
+  */
+
   const resetFilters = () => {
     setFilters(DEFAULT_FILTERS);
   };
