@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ignore old placeholder images
+public/images/placeholder/*-old.jpg
+public/images/placeholder/*_1024_1536.jpg
