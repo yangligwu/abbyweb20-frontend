@@ -40,12 +40,13 @@ export const DOORS_MEGA = {
         { label: "Commercial", href: "/doors/application/commercial" },
       ],
     },
-
+/*
     {
       key: "all-doors",
       title: "All Doors",
       items: [{ label: "Browse all doors", href: "/doors" }],
     },
+*/
   ],
 
   // ---------------------------

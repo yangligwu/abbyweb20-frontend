@@ -20,6 +20,8 @@ type DoorType =
   | "Doors with transom"
   | "Wine doors"
   | "Windows";
+type Material = "Steel" | "Aluminum";
+type Application = "Residential" | "Commercial"; //20260123
 type Glass = "Tempered" | "Impact";
 type Shape = "Flat" | "Arch" | "Round";
 
@@ -30,6 +32,8 @@ type DoorProduct = {
   availability: Availability;
   style: Style;
   doorType: DoorType;
+  material: Material; // ⭐ 新增
+  application: Application; // ⭐ 新增
   widthIn: number;
   heightIn: number;
   glass: Glass;
@@ -49,6 +53,8 @@ const PRODUCTS: DoorProduct[] = [
     availability: "Now",
     style: "Modern",
     doorType: "Single door",
+    material: "Aluminum",
+    application: "Residential",
     widthIn: 40,
     heightIn: 82,
     glass: "Tempered",
@@ -63,6 +69,8 @@ const PRODUCTS: DoorProduct[] = [
     availability: "Now",
     style: "Transitional",
     doorType: "Single door",
+    material: "Aluminum",
+    application: "Residential",
     widthIn: 36,
     heightIn: 80,
     glass: "Tempered",
@@ -77,6 +85,8 @@ const PRODUCTS: DoorProduct[] = [
     availability: "6-8 weeks",
     style: "Traditional",
     doorType: "Single door",
+    material: "Steel",
+    application: "Residential",
     widthIn: 42,
     heightIn: 96,
     glass: "Impact",
@@ -91,6 +101,8 @@ const PRODUCTS: DoorProduct[] = [
     availability: "Now",
     style: "Modern",
     doorType: "Single door",
+    material: "Steel",
+    application: "Residential",
     widthIn: 38,
     heightIn: 84,
     glass: "Impact",
@@ -106,6 +118,8 @@ const PRODUCTS: DoorProduct[] = [
     availability: "6-8 weeks",
     style: "Transitional",
     doorType: "Double door",
+    material: "Steel",
+    application: "Commercial",
     widthIn: 72,
     heightIn: 96,
     glass: "Impact",
@@ -120,6 +134,8 @@ const PRODUCTS: DoorProduct[] = [
     availability: "Now",
     style: "Modern",
     doorType: "Double door",
+    material: "Steel",
+    application: "Commercial",
     widthIn: 68,
     heightIn: 84,
     glass: "Tempered",
@@ -134,6 +150,8 @@ const PRODUCTS: DoorProduct[] = [
     availability: "Now",
     style: "Traditional",
     doorType: "Double door",
+    material: "Steel",
+    application: "Commercial",
     widthIn: 74,
     heightIn: 96,
     glass: "Tempered",
@@ -148,6 +166,8 @@ const PRODUCTS: DoorProduct[] = [
     availability: "6-8 weeks",
     style: "Transitional",
     doorType: "Double door",
+    material: "Steel",
+    application: "Commercial",
     widthIn: 70,
     heightIn: 82,
     glass: "Impact",
@@ -163,6 +183,8 @@ const PRODUCTS: DoorProduct[] = [
     availability: "Now",
     style: "Traditional",
     doorType: "Wine doors",
+    material: "Steel",
+    application: "Residential",
     widthIn: 36,
     heightIn: 84,
     glass: "Tempered",
@@ -177,6 +199,8 @@ const PRODUCTS: DoorProduct[] = [
     availability: "Now",
     style: "Modern",
     doorType: "Wine doors",
+    material: "Steel",
+    application: "Residential",
     widthIn: 34,
     heightIn: 80,
     glass: "Impact",
@@ -191,6 +215,8 @@ const PRODUCTS: DoorProduct[] = [
     availability: "6-8 weeks",
     style: "Transitional",
     doorType: "Wine doors",
+    material: "Steel",
+    application: "Residential",
     widthIn: 38,
     heightIn: 84,
     glass: "Tempered",
@@ -207,6 +233,8 @@ type Filters = {
   availability: Availability[];
   styles: Style[];
   doorTypes: DoorType[];
+  materials: Material[];   // ⭐ 新增
+  applications: Application[]; // ⭐ 新增
   glass: Glass[];
   shapes: Shape[];
   thermal: ("Yes" | "No")[];
@@ -225,6 +253,8 @@ type FacetValueMap = {
   availability: Availability;
   styles: Style;
   doorTypes: DoorType;
+  materials: Material;      // ⭐ 新增
+  applications: Application; // ⭐ 新增
   glass: Glass;
   shapes: Shape;
   thermal: "Yes" | "No";
@@ -344,6 +374,19 @@ function applyFilters(
       !filters.doorTypes.includes(p.doorType)
     )
       return false;
+    
+    // ✅ ⭐⭐ Material 判断（关键修复）
+    if (
+      filters.materials.length &&
+      !filters.materials.includes(p.material)
+    )
+      return false;
+
+    if (
+      filters.applications.length &&
+      !filters.applications.includes(p.application)
+    )
+      return false;
 
     if (
       p.widthIn < filters.widthRange[0] ||
@@ -399,6 +442,8 @@ const DEFAULT_FILTERS: Filters = {
   availability: [],
   styles: [],
   doorTypes: [],
+  materials: [],       // ⭐ 新增
+  applications: [], // ⭐ 新增
   glass: [],
   shapes: [],
   thermal: [],
@@ -414,6 +459,8 @@ export default function InStockPage() {
     availability: true,  // ✅ 默认展开
     style: false,
     doorType: false,
+    material: false, // ⭐ 新增
+    application: false, // ⭐ 新增
     width: true,   // ✅ 默认展开
     height: true,   // ✅ 默认展开
     glass: false,
@@ -432,6 +479,8 @@ export default function InStockPage() {
     availability: "availability",
     styles: "style",
     doorTypes: "doorType",
+    materials: "material", // ⭐ 新增
+    applications: "application", // ⭐ 新增
     glass: "glass",
     shapes: "shape",
     thermal: "thermal",
@@ -498,6 +547,8 @@ export default function InStockPage() {
   filters.availability.length > 0 ||
   filters.styles.length > 0 ||
   filters.doorTypes.length > 0 ||
+  filters.materials.length > 0 ||
+  filters.applications.length > 0
   filters.glass.length > 0 ||
   filters.shapes.length > 0 ||
   filters.thermal.length > 0 ||
@@ -511,6 +562,8 @@ export default function InStockPage() {
   (filters.availability.length > 0 ? 1 : 0) +
   (filters.styles.length > 0 ? 1 : 0) +
   (filters.doorTypes.length > 0 ? 1 : 0) +
+  (filters.materials.length > 0 ? 1 : 0) +
+  (filters.applications.length > 0 ? 1 : 0) +
   (filters.glass.length > 0 ? 1 : 0) +
   (filters.shapes.length > 0 ? 1 : 0) +
   (filters.thermal.length > 0 ? 1 : 0) +
@@ -537,6 +590,14 @@ export default function InStockPage() {
 
     filters.doorTypes.forEach((v) =>
       chips.push({ key: "doorTypes", label: "Door Type", value: v })
+    );
+
+    filters.materials.forEach((v) =>
+      chips.push({ key: "materials", label: "Material", value: v })
+    );
+
+    filters.applications.forEach((v) =>
+      chips.push({ key: "applications", label: "Application", value: v })
     );
 
     filters.glass.forEach((v) =>
@@ -742,7 +803,67 @@ export default function InStockPage() {
                 })}
               </AccordionSection>
 
-              {/* 4. Width (in) */}
+              {/* 4. Material */}
+              <AccordionSection
+                title="Material"
+                isOpen={openSection.material}
+                toggle={() => toggleSection("material")}
+              >
+                {(["Steel", "Aluminum"] as Material[]).map((value) => {
+                  const count = getFacetCount("materials", value, filters);
+
+                  return (
+                    <label key={value} className="flex items-center gap-2 mb-1">
+                      <input
+                        type="checkbox"
+                        checked={filters.materials.includes(value)}
+                        onChange={() =>
+                          setFilters((prev) => ({
+                            ...prev,
+                            materials: prev.materials.includes(value)
+                              ? prev.materials.filter((v) => v !== value)
+                              : [...prev.materials, value],
+                          }))
+                        }
+                      />
+                      <span className="flex-1 text-sm">{value}</span>
+                      <span className="text-xs text-gray-400">({count})</span>
+                    </label>
+                  );
+                })}
+              </AccordionSection>
+
+              {/* 5. Application */}
+              <AccordionSection
+                title="Application"
+                isOpen={openSection.application}
+                toggle={() => toggleSection("application")}
+              >
+                {(["Residential", "Commercial"] as Application[]).map((value) => {
+                  const count = getFacetCount("applications", value, filters);
+
+                  return (
+                    <label key={value} className="flex items-center gap-2 mb-1">
+                      <input
+                        type="checkbox"
+                        checked={filters.applications.includes(value)}
+                        onChange={() =>
+                          setFilters((prev) => ({
+                            ...prev,
+                            applications: prev.applications.includes(value)
+                              ? prev.applications.filter((v) => v !== value)
+                              : [...prev.applications, value],
+                          }))
+                        }
+                      />
+                      <span className="flex-1 text-sm">{value}</span>
+                      <span className="text-xs text-gray-400">({count})</span>
+                    </label>
+                  );
+                })}
+              </AccordionSection>
+
+              {/* 6. Width (in) */}
               <AccordionSection
                 title="Width (in)"
                 isOpen={openSection.width}
@@ -758,7 +879,7 @@ export default function InStockPage() {
                 />
               </AccordionSection>
 
-              {/* 5. Height (in) */}
+              {/* 7. Height (in) */}
               <AccordionSection
                 title="Height (in)"
                 isOpen={openSection.height}
@@ -774,7 +895,7 @@ export default function InStockPage() {
                 />
               </AccordionSection>
 
-              {/* 6. Glass */}
+              {/* 8. Glass */}
               <AccordionSection
                 title="Glass"
                 isOpen={openSection.glass}
@@ -804,7 +925,7 @@ export default function InStockPage() {
                 })}
               </AccordionSection>
 
-              {/* 7. Shape */}
+              {/* 9. Shape */}
               <AccordionSection
                 title="Shape"
                 isOpen={openSection.shape}
@@ -834,7 +955,7 @@ export default function InStockPage() {
                 })}
               </AccordionSection>
 
-              {/* 8. Thermal */}
+              {/* 10. Thermal */}
               <AccordionSection
                 title="Thermal"
                 isOpen={openSection.thermal}
@@ -864,7 +985,7 @@ export default function InStockPage() {
                 })}
               </AccordionSection>
 
-              {/* 9. On Sale */}
+              {/* 10. On Sale */}
               <AccordionSection
                 title="On Sale (Big Deal)"
                 isOpen={openSection.sale}
